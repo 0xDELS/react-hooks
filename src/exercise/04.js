@@ -6,10 +6,16 @@ import {useEffect} from 'react'
 import {useState} from 'react'
 
 function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null))
+  const [squares, setSquares] = useState(
+    JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null),
+  )
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
+
+  useEffect(() => {
+    window.localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
 
   function selectSquare(square) {
     if (winner || squares[square]) {
